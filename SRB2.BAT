@@ -1,12 +1,14 @@
 @ECHO OFF
 
-SET GAMEDIR=C:\GAMES\SRB2\
-SET SRB2_EXEC=SRB2win.exe
+SET DRIVE=C:
+SET GAMEDIR=%DRIVE%\SRB2
+SET SRB2_EXEC=srb2win.exe
 
-IF NOT EXIST %GAMEDIR% GOTO GAMEDIRFAIL
+%DRIVE%
 CD %GAMEDIR%
-IF NOT EXIST %SRB2_EXEC% GOTO EXENOTFOUND
-IF NOT EXIST SRB2.PK3 GOTO PK3NOTFOUND
+IF NOT EXIST %GAMEDIR% GOTO GAMEDIRFAIL
+IF NOT EXIST %GAMEDIR%\%SRB2_EXEC% GOTO EXENOTFOUND
+IF NOT EXIST %GAMEDIR%\SRB2.PK3 GOTO PK3NOTFOUND
 :MENU
 CLS
 ECHO ====================================
@@ -41,7 +43,7 @@ IF %ERRORLEVEL%==9 GOTO EXIT
 :NORMAL
 ECHO.
 ECHO Launching %SRB2_EXEC% ...
-START %SRB2_EXEC%
+START %GAMEDIR%\%SRB2_EXEC%
 GOTO MENU
 
 :ADDONS
@@ -77,7 +79,7 @@ ECHO Multiple files are also allowed
 ECHO Example: ADDONS\mod1.WAD ADDONS\cool_mod.pk3 DOWNLOAD\mod2.WAD
 SET /P ADDONline=:
 ECHO Launching %SRB2_EXEC% -FILE %ADDONline%
-START %SRB2_EXEC% -FILE %ADDONline%
+START %GAMEDIR%\%SRB2_EXEC% -FILE %ADDONline%
 GOTO MENU
 
 :FOLDER
@@ -89,7 +91,7 @@ ECHO.
 ECHO Enter the full path to ADD-ON folder you want to test
 ECHO Current directry is %GAMEDIR%
 SET /P ADDONfolder=:
-START %SRB2_EXEC% -FOLDER %ADDONfolder%
+START %GAMEDIR%\%SRB2_EXEC% -FOLDER %ADDONfolder%
 GOTO MENU
 
 :MULTIP
@@ -117,7 +119,7 @@ ECHO Additional arguments must be AFTER IP
 ECHO.
 SET /P CONNECTip=:
 ECHO Launching %SRB2_EXEC% -CONNECT %CONNECTip% ...
-START %SRB2_EXEC% -CONNECT %CONNECTip%
+START %GAMEDIR%\%SRB2_EXEC% -CONNECT %CONNECTip%
 GOTO MENU
 
 :SERVER
@@ -128,7 +130,7 @@ ECHO.
 ECHO Type your arguments to start server
 ECHO Current prompt arguments have -SERVER already
 ECHO.
-ECHO List of default Prompt Arguments for Server:
+ECHO List of the most useful arguments for Server:
 ECHO   -DEDICATED                  - Host mode where host is not a player, console appears instead
 ECHO   -ROOM [ID_NUM]              - Set room specification, ID 33-standart, 28-casual, 38-Custom
 ECHO   -FILE [your_add-on_file(s)] - Add ADD-ONs to game
@@ -139,7 +141,7 @@ ECHO.
 ECHO For other Prompt Arguments visit: WIKI.SRB2.ORG/wiki/Command_line_parameters
 SET /P SERVERline=:
 ECHO Launching %SRB2_EXEC% -SERVER %SERVERline% ...
-START %SRB2_EXEC% -SERVER %SERVERline%
+START %GAMEDIR%\%SRB2_EXEC% -SERVER %SERVERline%
 GOTO MENU
 
 :CUSTOM
@@ -147,7 +149,7 @@ CLS
 ECHO  Custom launch
 ECHO ===============
 ECHO.
-ECHO List of Prompt Arguments:
+ECHO List of the most useful arguments:
 ECHO   -FILE [your_add-on_file(s)] - Adds ADD-ONs to game
 ECHO   -WARP [MAP##] or -WARP "[level_name]" - Warps to suggested level
 ECHO   -OPENGL or -SOFTWARE        - Launches the game in OpenGL/Software renderer
@@ -160,7 +162,7 @@ ECHO.
 ECHO For other Prompt Arguments visit: WIKI.SRB2.ORG/wiki/Command_line_parameters
 SET /P CUSTOMline=:
 ECHO Launching %SRB2_EXEC% %CUSTOMline% ...
-START %SRB2_EXEC% %CUSTOMline%
+START %GAMEDIR%\%SRB2_EXEC% %CUSTOMline%
 GOTO MENU
 
 :CONFIGedit
@@ -208,6 +210,7 @@ ECHO Note that this option will not be saved next time you start the launcher.
 ECHO You can change your default executable by editing SRB2_EXEC in this .BAT file.
 ECHO.
 ECHO 1 - Vanilla (SRB2win.exe)
+ECHO 2 - TSoURDt3rd
 ECHO 2 - Custom...
 ECHO 3 - Back
 ECHO.
@@ -218,8 +221,8 @@ IF %ERRORLEVEL%==3 GOTO MENU
 GOTO MENU
 
 :GAMEDIRFAIL
-ECHO Can't start the launcher because %GAMEDIR% that is specified as
-ECHO the SRB2 game directory does not exist. Please edit this .BAT file and
+ECHO Cannot start the launcher because %GAMEDIR%, which is specified as
+ECHO the SRB2 game directory, does not exist. Please edit this .BAT file and
 ECHO change your GAMEDIR
 PAUSE
 GOTO EXIT
@@ -227,8 +230,8 @@ GOTO EXIT
 :EXENOTFOUND
 ECHO Cannot find your %SRB2_EXEC%
 ECHO Directory of SRB2 is set to %GAMEDIR%
-ECHO If your game directory is different, open this file in NOTEPAD.EXE
-ECHO and edit the line containing "SET GAMEDIR=" with: "SET GAMEDIR=[full_path_to_your_game_dir]"
+ECHO If your game directory is different, open this file in any Text Editor
+ECHO and edit the config line containing "SET GAMEDIR=" with: "SET GAMEDIR=[full_path_to_your_game_dir]"
 ECHO.
 ECHO Most likely your executable is renamed or completely removed. If that's the deal you should
 ECHO undo your changes OR edit this .BAT and change your SRB2_EXEC
@@ -238,8 +241,8 @@ GOTO EXIT
 :PK3NOTFOUND
 ECHO Cannot find your SRB2.PK3
 ECHO Directory of SRB2 is set to %GAMEDIR%
-ECHO If your game directory is different, open this file in NOTEPAD.EXE
-ECHO and edit the line containing "SET GAMEDIR=" with: "SET GAMEDIR=[full_path_to_your_game_dir]"
+ECHO If your game directory is different, open this file in any Text Editor
+ECHO and edit the config line containing "SET GAMEDIR=" with: "SET GAMEDIR=[full_path_to_your_game_dir]"
 ECHO.
 ECHO This is the main gamedata file and the game won't start without it. If you lost your
 ECHO copy of SRB2.PK3 go to WWW.SRB2.ORG and download the file again or reinstall the game.
